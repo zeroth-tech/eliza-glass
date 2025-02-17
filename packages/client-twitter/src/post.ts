@@ -66,7 +66,7 @@ const twitterPostTemplate = `
 {{providers}}
 
 {{characterPostExamples}}
-{{postExamples}}
+
 {{postDirections}}
 
 # Task: Generate a post in the voice and style and perspective of {{agentName}} @{{twitterUserName}}.
