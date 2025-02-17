@@ -1,5 +1,6 @@
 import pino, { type LogFn } from "pino";
 import pretty from "pino-pretty";
+import { createWriteStream } from 'fs';
 
 import { parseBooleanFromText } from "./parsing.ts";
 
@@ -19,14 +20,17 @@ const customLevels: Record<string, number> = {
 const raw = parseBooleanFromText(process?.env?.LOG_JSON_FORMAT) || false;
 
 const createStream = () => {
+    const fileStream = createWriteStream('./logs/app.log', { flags: 'a' });
+    
     if (raw) {
-        return undefined;
+        return fileStream;
     }
+    
     return pretty({
         colorize: true,
         translateTime: "yyyy-mm-dd HH:MM:ss",
         ignore: "pid,hostname",
-    });
+    }).pipe(fileStream);
 };
 
 const defaultLevel = process?.env?.DEFAULT_LOG_LEVEL || "info";
