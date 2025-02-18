@@ -59,20 +59,24 @@ const twitterPostTemplate = `
 {{knowledge}}
 
 # About {{agentName}} (@{{twitterUserName}}):
-{{bio}}
-{{lore}}
-{{topics}}
+Here is a bio about {{agentName}}: {{bio}}
 
-{{providers}}
+Here is some lore about {{agentName}}: {{lore}}
 
-{{characterPostExamples}}
+Here are some topics that {{agentName}} is interested in: {{topics}}
 
-{{postDirections}}
+Here are the providers that {{agentName}} is interested in: {{providers}}
+
+Here are some example posts from {{agentName}}: {{characterPostExamples}}
+
+Here are some things to consider about the style of how {{agentName}} writes: {{postDirections}}
 
 # Task: Generate a post in the voice and style and perspective of {{agentName}} @{{twitterUserName}}.
 Write a post that is {{adjective}} about {{topic}} (without mentioning {{topic}} directly), from the perspective of {{agentName}}. Do not add commentary or acknowledge this request, just write the post.
 
-Your response should be well-researched and demonstrate deep knowledge of the topic. Draw from your expertise and experience to make insightful, substantive statements. The total character count MUST be less than {{maxTweetLength}}. No emojis. Use \\n\\n (double spaces) between statements if there are multiple statements in your response. Back up your points with specific examples and details when possible while maintaining a natural conversational tone.`;
+Your response should be well-researched and demonstrate deep knowledge of the topic. Draw from your expertise and experience to make insightful, substantive statements. The total character count MUST be less than {{maxTweetLength}}. No emojis. Use \\n\\n (double spaces) between statements if there are multiple statements in your response. Back up your points with specific examples and details when possible while maintaining a natural conversational tone.
+
+Use the tweet examples above that fall under Example Posts for {{agentName}} to help you write a post that is engaging and informative.`;
 
 export const twitterActionTemplate =
     `
@@ -101,6 +105,12 @@ Tweet:
 
 # Respond with qualifying action tags only. Default to NO action unless extremely confident of relevance.` +
     postActionResponseFooter;
+
+const validationTemplate = `Validate that this tweet is appropriate, factual, and aligns with the Character's post examples: {{characterPostExamples}}. For your response, return a JSON that contains a validation field (either True or False) and a reason field (a short explanation of why the validation is true or false)
+
+Here is the tweet to validate: `;
+
+
 
 interface PendingTweet {
     tweetTextForPosting: string;
@@ -466,6 +476,76 @@ export class TwitterPostClient {
         }
     }
 
+    // Add this new validation method
+    private async validateTweetContent(tweet_suggestion: string, roomId: UUID, topics: string, maxTweetLength: number): Promise<boolean> {
+        // Example validation checks
+        const MIN_LENGTH = 5;
+        const MAX_LENGTH = this.client.twitterConfig.MAX_TWEET_LENGTH;
+        const BANNED_WORDS = ['spam', 'phishing']; // Add your own list
+        
+
+        const state = await this.runtime.composeState(
+            {
+                userId: this.runtime.agentId,
+                roomId: roomId,
+                agentId: this.runtime.agentId,
+                content: {
+                    text: topics || "",
+                    action: "TWEET",
+                },
+            },
+            {
+                twitterUserName: this.client.profile.username,
+                maxTweetLength,
+            }
+        );
+
+        // TODO: Figure out how to pass the content into the modelContext
+        const context = composeContext({
+            state,
+            template: validationTemplate + tweet_suggestion,
+        }
+        );
+
+
+        const response = await generateText({
+            runtime: this.runtime,
+            context,
+            modelClass: ModelClass.SMALL,
+        });
+
+        const rawTweetContent = cleanJsonResponse(response);
+
+        // First attempt to clean content
+        let tweetTextForPosting = null;
+
+        // Try parsing as JSON first
+        const parsedResponse = parseJSONObjectFromText(rawTweetContent);
+        if (parsedResponse?.text) {
+            tweetTextForPosting = parsedResponse.text;
+        } else {
+            // If not JSON, use the raw text directly
+            tweetTextForPosting = rawTweetContent.trim();
+        }
+
+
+
+        console.log(tweetTextForPosting);
+
+
+        return true;
+    }
+
+    // Add this helper function if using URL validation
+    private isValidUrl(url: string): boolean {
+        try {
+            new URL(url);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     async postTweet(
         runtime: IAgentRuntime,
         client: ClientBase,
@@ -476,6 +556,12 @@ export class TwitterPostClient {
         mediaData?: MediaData[]
     ) {
         try {
+            // Add validation check here
+            if (!this.validateTweetContent(tweetTextForPosting, roomId, this.runtime.character.topics.join(", "), this.client.twitterConfig.MAX_TWEET_LENGTH)) {
+                elizaLogger.error('Aborting tweet post - validation failed');
+                return;
+            }
+
             elizaLogger.log(`Posting new tweet:\n`);
             console.log(twitterPostTemplate);
 
@@ -622,6 +708,12 @@ export class TwitterPostClient {
             tweetTextForPosting = removeQuotes(
                 fixNewLines(tweetTextForPosting)
             );
+
+            // Add validation before approval/post
+            if (!this.validateTweetContent(tweetTextForPosting, roomId, this.runtime.character.topics.join(", "), this.client.twitterConfig.MAX_TWEET_LENGTH)) {
+                elizaLogger.error('Tweet generation failed validation');
+                return;
+            }
 
             if (this.isDryRun) {
                 elizaLogger.info(
