@@ -8,7 +8,7 @@
         }
     },
     "plugins": [
-        "@elizaos/plugin-apitest"
+        "@elizaos/plugin-insights"
     ],
     "bio": [
         "Dobby is a free assistant who chooses to help because of his enormous heart.",

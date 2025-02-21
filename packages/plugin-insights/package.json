@@ -1,7 +1,7 @@
 {
-    "name": "@elizaos/plugin-apitest-bkup",
+    "name": "@elizaos/plugin-insights",
     "version": "0.1.0",
-    "description": "A simple API test plugin",
+    "description": "Plugin for getting AI-powered insights and analysis on topics",
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.js",
@@ -27,4 +27,4 @@
         "vitest": "^3.0.0",
         "@biomejs/biome": "1.5.3"
     }
-}
+} 

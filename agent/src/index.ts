@@ -28,6 +28,7 @@ import { lightningPlugin } from "@elizaos/plugin-lightning";
 import { elizaCodeinPlugin, onchainJson } from "@elizaos/plugin-iq6900";
 import { dcapPlugin } from "@elizaos/plugin-dcap";
 import { PluginApitest } from "@elizaos/plugin-apitest";
+import { insightsPlugin } from "@elizaos/plugin-insights";
 
 import {
     AgentRuntime,
