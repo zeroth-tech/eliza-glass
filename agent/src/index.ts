@@ -29,6 +29,7 @@ import { elizaCodeinPlugin, onchainJson } from "@elizaos/plugin-iq6900";
 import { dcapPlugin } from "@elizaos/plugin-dcap";
 import { PluginApitest } from "@elizaos/plugin-apitest";
 import { insightsPlugin } from "@elizaos/plugin-insights";
+import { BlogPostPlugin } from "@elizaos/plugin-blogpost";
 
 import {
     AgentRuntime,
@@ -1035,6 +1036,7 @@ export async function createAgent(
                 ? elizaCodeinPlugin
                 : null,
             bootstrapPlugin,
+            BlogPostPlugin,
             getSecret(character, "CDP_API_KEY_NAME") &&
                 getSecret(character, "CDP_API_KEY_PRIVATE_KEY") &&
                 getSecret(character, "CDP_AGENT_KIT_NETWORK")
@@ -1199,9 +1201,9 @@ export async function createAgent(
             getSecret(character, "LETZAI_API_KEY") ? letzAIPlugin : null,
             getSecret(character, "STARGAZE_ENDPOINT") ? stargazePlugin : null,
             getSecret(character, "GIPHY_API_KEY") ? giphyPlugin : null,
-            getSecret(character, "PASSPORT_API_KEY")
-                ? gitcoinPassportPlugin
-                : null,
+            // getSecret(character, "PASSPORT_API_KEY")
+            //     ? gitcoinPassportPlugin
+            //     : null,
             getSecret(character, "GENLAYER_PRIVATE_KEY")
                 ? genLayerPlugin
                 : null,
