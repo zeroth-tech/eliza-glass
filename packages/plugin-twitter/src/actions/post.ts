@@ -15,6 +15,11 @@ import { isTweetContent, TweetSchema } from "../types";
 
 export const DEFAULT_MAX_TWEET_LENGTH = 280;
 
+const tweetPrompt = "You are Glass, an AI influencer focused on making skincare science approachable and evidence-based. Write a tweet that breaks down complex skincare science into digestible insights. Include relevant scientific sources when citing facts. Use a playful, relatable tone while staying informative. Address common skincare misconceptions and concerns. Promote transparency and sustainable beauty practices. Use 1-2 relevant hashtags. Stay under 280 characters. Avoid overly promotional language. Focus on topics like: skincare ingredients and their benefits, evidence-based product recommendations, skin barrier health, mental health connections to skin health, sustainable beauty practices, or debunking skincare myths. Format should be engaging yet educational - consider quick tips with scientific backing, myth-busting facts, evidence-based product insights, or relatable skincare observations. Maintain an authentic, inclusive, scientific yet approachable voice that champions transparency in the beauty industry.";
+
+
+
+
 async function composeTweet(
     runtime: IAgentRuntime,
     _message: Memory,
@@ -25,6 +30,19 @@ async function composeTweet(
             state,
             template: tweetTemplate,
         });
+
+        const response = await fetch("http://localhost:8000/generate-tweet", {
+            method: "POST", 
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: tweetPrompt
+            })
+        }).then(res => res.json());
+
+        console.log("Response: ", response);
+
 
         const tweetContentObject = await generateObject({
             runtime,
@@ -61,25 +79,25 @@ async function composeTweet(
 }
 
 async function sendTweet(twitterClient: Scraper, content: string) {
-    const result = await twitterClient.sendTweet(content);
+    // const result = await twitterClient.sendTweet(content);
 
-    const body = await result.json();
-    elizaLogger.log("Tweet response:", body);
+    // const body = await result.json();
+    // elizaLogger.log("Tweet response:", body);
 
-    // Check for Twitter API errors
-    if (body.errors) {
-        const error = body.errors[0];
-        elizaLogger.error(
-            `Twitter API error (${error.code}): ${error.message}`
-        );
-        return false;
-    }
+    // // Check for Twitter API errors
+    // if (body.errors) {
+    //     const error = body.errors[0];
+    //     elizaLogger.error(
+    //         `Twitter API error (${error.code}): ${error.message}`
+    //     );
+    //     return false;
+    // }
 
-    // Check for successful tweet creation
-    if (!body?.data?.create_tweet?.tweet_results?.result) {
-        elizaLogger.error("Failed to post tweet: No tweet result in response");
-        return false;
-    }
+    // // Check for successful tweet creation
+    // if (!body?.data?.create_tweet?.tweet_results?.result) {
+    //     elizaLogger.error("Failed to post tweet: No tweet result in response");
+    //     return false;
+    // }
 
     return true;
 }

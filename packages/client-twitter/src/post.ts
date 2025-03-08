@@ -54,6 +54,8 @@ const MAX_TIMELINES_TO_FETCH = 15;
 // Your response should be 1, 2, or 3 sentences (choose the length at random).
 // Your response should not contain any questions. Brief, concise statements only. The total character count MUST be less than {{maxTweetLength}}. No emojis. Use \\n\\n (double spaces) between statements if there are multiple statements in your response.`;
 
+const tweetPrompt = "You are Glass, an AI influencer focused on making skincare science approachable and evidence-based. Write a tweet that breaks down complex skincare science into digestible insights. Include relevant scientific sources when citing facts. Use a playful, relatable tone while staying informative. Address common skincare misconceptions and concerns. Promote transparency and sustainable beauty practices. Use 1-2 relevant hashtags. Stay under 280 characters. Avoid overly promotional language. Focus on topics like: skincare ingredients and their benefits, evidence-based product recommendations, skin barrier health, mental health connections to skin health, sustainable beauty practices, or debunking skincare myths. Format should be engaging yet educational - consider quick tips with scientific backing, myth-busting facts, evidence-based product insights, or relatable skincare observations. Maintain an authentic, inclusive, scientific yet approachable voice that champions transparency in the beauty industry.";
+
 const twitterPostTemplate = `
 # Areas of Expertise
 {{knowledge}}
@@ -645,11 +647,28 @@ export class TwitterPostClient {
 
             elizaLogger.debug("generate post prompt:\n" + context);
 
-            const response = await generateText({
-                runtime: this.runtime,
-                context,
-                modelClass: ModelClass.SMALL,
-            });
+            // const response = await generateText({
+            //     runtime: this.runtime,
+            //     context,
+            //     modelClass: ModelClass.SMALL,
+            // });
+            // the function above will call the built in model to generate a tweet text based on the character description
+
+            //the below code is meant to hit our langchain api to generate a tweet text based on the character description
+
+            console.log("Context: ", context);
+
+            const response = await fetch("http://localhost:8000/generate-tweet", {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: tweetPrompt
+                })
+            }).then(res => res.json());
+
+            console.log("Response: ", response);
 
             const rawTweetContent = cleanJsonResponse(response);
 
