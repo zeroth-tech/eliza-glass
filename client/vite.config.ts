@@ -30,6 +30,17 @@ export default defineConfig(({ mode }) => {
             sourcemap: false,
             cssCodeSplit: true,
         },
+        server: {
+            watch: {
+                usePolling: true,
+                interval: 1000,
+                ignored: [
+                    "**/node_modules/**",
+                    "**/.git/**",
+                    "**/dist/**"
+                ]
+            }
+        },
         resolve: {
             alias: {
                 "@": "/src",

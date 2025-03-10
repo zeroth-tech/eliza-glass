@@ -75,7 +75,7 @@ ${result.sources.map(source => `- ${source}`).join('\n')}
         [
             {
                 user: "{{user1}}",
-                content: { text: "What are the trends in AI development?" },
+                content: { text: "What are the current trends in skincare ingredients?" },
             },
             {
                 user: "{{user2}}",
@@ -88,12 +88,12 @@ ${result.sources.map(source => `- ${source}`).join('\n')}
         [
             {
                 user: "{{user1}}",
-                content: { text: "Can you analyze the crypto market?" },
+                content: { text: "Can you tell me about the benefits of hyaluronic acid in skincare?" },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll get some insights on that",
+                    text: "I'll get some insights on that ingredient for you",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -101,12 +101,12 @@ ${result.sources.map(source => `- ${source}`).join('\n')}
         [
             {
                 user: "{{user1}}",
-                content: { text: "Will Trump meet Putin in his first 100 days of office?" },
+                content: { text: "What's the difference between chemical and physical sunscreens?" },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Let me investigate the likelihood of that meeting.",
+                    text: "Let me investigate the differences between these sunscreen types.",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -114,12 +114,12 @@ ${result.sources.map(source => `- ${source}`).join('\n')}
         [
             {
                 user: "{{user1}}",
-                content: { text: "What's the latest on the Epstein client list?" },
+                content: { text: "Are retinol products safe during pregnancy?" },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I can analyze the information available on that.",
+                    text: "I can analyze the information available on retinol safety during pregnancy.",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -127,12 +127,12 @@ ${result.sources.map(source => `- ${source}`).join('\n')}
         [
             {
                 user: "{{user1}}",
-                content: { text: "What's happening with the economy right now?" },
+                content: { text: "What's the best way to treat hormonal acne?" },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll get you some insights on the current economic situation.",
+                    text: "I'll get you some insights on treating hormonal acne effectively.",
                     action: "GET_INSIGHTS",
                 },
             },

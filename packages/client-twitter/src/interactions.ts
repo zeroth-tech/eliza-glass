@@ -161,7 +161,7 @@ export class TwitterInteractionClient {
                                 const isUnprocessed =
                                     !this.client.lastCheckedTweetId ||
                                     Number.parseInt(tweet.id) >
-                                        this.client.lastCheckedTweetId;
+                                    this.client.lastCheckedTweetId;
                                 const isRecent =
                                     Date.now() - tweet.timestamp * 1000 <
                                     2 * 60 * 60 * 1000;
@@ -203,7 +203,7 @@ export class TwitterInteractionClient {
                             // Randomly select one tweet from this user
                             const randomTweet =
                                 tweets[
-                                    Math.floor(Math.random() * tweets.length)
+                                Math.floor(Math.random() * tweets.length)
                                 ];
                             selectedTweets.push(randomTweet);
                             elizaLogger.log(
@@ -277,7 +277,7 @@ export class TwitterInteractionClient {
                     );
 
                     const message = {
-                        content: { 
+                        content: {
                             text: tweet.text,
                             imageUrls: tweet.photos?.map(photo => photo.url) || []
                         },
@@ -349,7 +349,7 @@ export class TwitterInteractionClient {
             .join("\n\n");
 
         const imageDescriptionsArray = [];
-        try{
+        try {
             for (const photo of tweet.photos) {
                 const description = await this.runtime
                     .getService<IImageDescriptionService>(
@@ -359,9 +359,9 @@ export class TwitterInteractionClient {
                 imageDescriptionsArray.push(description);
             }
         } catch (error) {
-    // Handle the error
-    elizaLogger.error("Error Occured during describing image: ", error);
-}
+            // Handle the error
+            elizaLogger.error("Error Occured during describing image: ", error);
+        }
 
 
 
@@ -372,8 +372,8 @@ export class TwitterInteractionClient {
             currentPost,
             formattedConversation,
             imageDescriptions: imageDescriptionsArray.length > 0
-            ? `\nImages in Tweet:\n${imageDescriptionsArray.map((desc, i) =>
-              `Image ${i + 1}: Title: ${desc.title}\nDescription: ${desc.description}`).join("\n\n")}`:""
+                ? `\nImages in Tweet:\n${imageDescriptionsArray.map((desc, i) =>
+                    `Image ${i + 1}: Title: ${desc.title}\nDescription: ${desc.description}`).join("\n\n")}` : ""
         });
 
         // check if the tweet exists, save if it doesn't
@@ -395,10 +395,10 @@ export class TwitterInteractionClient {
                     imageUrls: tweet.photos?.map(photo => photo.url) || [],
                     inReplyTo: tweet.inReplyToStatusId
                         ? stringToUuid(
-                              tweet.inReplyToStatusId +
-                                  "-" +
-                                  this.runtime.agentId
-                          )
+                            tweet.inReplyToStatusId +
+                            "-" +
+                            this.runtime.agentId
+                        )
                         : undefined,
                 },
                 userId: userIdUUID,
@@ -534,8 +534,8 @@ export class TwitterInteractionClient {
                     }
 
                     const responseTweetId =
-                    responseMessages[responseMessages.length - 1]?.content
-                        ?.tweetId;
+                        responseMessages[responseMessages.length - 1]?.content
+                            ?.tweetId;
 
                     await this.runtime.processActions(
                         message,
@@ -614,10 +614,10 @@ export class TwitterInteractionClient {
                         imageUrls: currentTweet.photos?.map(photo => photo.url) || [],
                         inReplyTo: currentTweet.inReplyToStatusId
                             ? stringToUuid(
-                                  currentTweet.inReplyToStatusId +
-                                      "-" +
-                                      this.runtime.agentId
-                              )
+                                currentTweet.inReplyToStatusId +
+                                "-" +
+                                this.runtime.agentId
+                            )
                             : undefined,
                     },
                     createdAt: currentTweet.timestamp * 1000,
