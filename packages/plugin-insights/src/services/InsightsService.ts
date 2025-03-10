@@ -5,8 +5,7 @@ interface InsightsRequest {
 }
 
 interface InsightsResponse {
-    analysis: string;
-    sources: string[];
+    agentReply: string;
 }
 
 export class InsightsService {

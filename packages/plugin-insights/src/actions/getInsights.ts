@@ -52,15 +52,15 @@ export const getInsights: Action = {
             const result = await service.getInsights(message.content.text, maxLoops);
 
             // Format the response with both analysis and sources
-            const formattedResponse = `
-Analysis: ${result.analysis}
+            //             const formattedResponse = `
+            // // Analysis: ${result.analysis}
 
-Sources:
-${result.sources.map(source => `- ${source}`).join('\n')}
-            `.trim();
+            // Sources:
+            // ${result.sources.map(source => `- ${source}`).join('\n')}
+            // `.trim();
 
             callback({
-                text: formattedResponse,
+                text: JSON.stringify(result.agentReply),
             });
 
             return true;
