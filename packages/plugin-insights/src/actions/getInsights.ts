@@ -32,6 +32,7 @@ export const getInsights: Action = {
         "DELVE_DEEPER",
         "STUDY_MATTER",
     ],
+    suppressInitialMessage: true,
     validate: async (_runtime: IAgentRuntime, message: Memory) => {
         return !!message.content?.text;
     },
@@ -80,7 +81,6 @@ export const getInsights: Action = {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Let me analyze that topic for you",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -93,7 +93,6 @@ export const getInsights: Action = {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll get some insights on that ingredient for you",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -106,7 +105,6 @@ export const getInsights: Action = {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Let me investigate the differences between these sunscreen types.",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -119,7 +117,6 @@ export const getInsights: Action = {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I can analyze the information available on retinol safety during pregnancy.",
                     action: "GET_INSIGHTS",
                 },
             },
@@ -132,10 +129,74 @@ export const getInsights: Action = {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll get you some insights on treating hormonal acne effectively.",
                     action: "GET_INSIGHTS",
                 },
             },
         ],
+        // [
+        //     {
+        //         user: "{{user1}}",
+        //         content: { text: "What are the current trends in skincare ingredients?" },
+        //     },
+        //     {
+        //         user: "{{user2}}",
+        //         content: {
+        //             text: "Let me analyze that topic for you",
+        //             action: "GET_INSIGHTS",
+        //         },
+        //     },
+        // ],
+        // [
+        //     {
+        //         user: "{{user1}}",
+        //         content: { text: "Can you tell me about the benefits of hyaluronic acid in skincare?" },
+        //     },
+        //     {
+        //         user: "{{user2}}",
+        //         content: {
+        //             text: "I'll get some insights on that ingredient for you",
+        //             action: "GET_INSIGHTS",
+        //         },
+        //     },
+        // ],
+        // [
+        //     {
+        //         user: "{{user1}}",
+        //         content: { text: "What's the difference between chemical and physical sunscreens?" },
+        //     },
+        //     {
+        //         user: "{{user2}}",
+        //         content: {
+        //             text: "Let me investigate the differences between these sunscreen types.",
+        //             action: "GET_INSIGHTS",
+        //         },
+        //     },
+        // ],
+        // [
+        //     {
+        //         user: "{{user1}}",
+        //         content: { text: "Are retinol products safe during pregnancy?" },
+        //     },
+        //     {
+        //         user: "{{user2}}",
+        //         content: {
+        //             text: "I can analyze the information available on retinol safety during pregnancy.",
+        //             action: "GET_INSIGHTS",
+        //         },
+        //     },
+        // ],
+        // [
+        //     {
+        //         user: "{{user1}}",
+        //         content: { text: "What's the best way to treat hormonal acne?" },
+        //     },
+        //     {
+        //         user: "{{user2}}",
+        //         content: {
+        //             text: "I'll get you some insights on treating hormonal acne effectively.",
+        //             action: "GET_INSIGHTS",
+        //         },
+        //     },
+        // ],
     ] as ActionExample[][],
 };
