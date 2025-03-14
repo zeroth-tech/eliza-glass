@@ -1,0 +1,17 @@
+[Unit]
+Description=Glass Eliza Service
+After=network.target
+
+[Service]
+User=glass
+; Group=glass
+; WorkingDirectory=/home/glass/dev/eliza-glass
+Environment="PATH=/home/glass/dev/eliza-glass/:$PATH"
+ExecStart=/home/glass/dev/eliza-glass/pnpm start --characters="characters/glass-r1.json"
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
